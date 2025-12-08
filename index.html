@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO & Identity -->
+    <title>Tarik Talhaoui | Lead Product Builder & Creative Tech</title>
+    <meta name="description" content="Développeur Freelance & Product Builder à Avignon. Expert React/Next.js. Je transforme vos idées en produits digitaux d'exception avec un réseau d'experts créatifs." />
+    <meta name="keywords" content="Freelance, Lead Tech, Product Builder, Avignon, React, Next.js, Web Design, Agence Web, Développement Sur Mesure" />
+    <meta name="author" content="Tarik Talhaoui" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tarik Talhaoui | Digital Craftsman" />
+    <meta property="og:description" content="Architecture technique et Design émotionnel. Découvrez mes réalisations." />
+    <meta property="og:image" content="https://tariktalhaoui.fr/og-image.jpg" />
+    <meta property="og:url" content="https://tariktalhaoui.fr" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tarik Talhaoui | Product Builder" />
+    <meta name="twitter:description" content="Lead Tech Freelance. Avignon, France." />
+
+    <!-- Calendly Widget -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Manrope', 'sans-serif'],
+              display: ['Syne', 'sans-serif'],
+            },
+            colors: {
+              // Dark Mode Colors
+              'void': '#050505', // Plus profond que #080808
+              'off-white': '#EDEDED',
+              'surface': '#101010',
+              
+              // Light Mode Colors
+              'paper': '#FAFAFA',
+              'ink': '#121212',
+              
+              // Accents - Violet Électrique plus clair pour le contraste
+              'accent': '#8B5CF6', // Violet-500 (plus lumineux que 600/700)
+              'accent-hover': '#7C3AED', // Violet-600
+              'accent-light': '#A78BFA', // Violet-400 (pour les textes sur fond noir)
+            },
+            backgroundImage: {
+              'noise': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmaWxsZXIgaWQ9Im4iPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idHJhbnNwYXJlbnQiLz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjA1IiBmaWx0ZXI9InVybCgjbikzaIvPjwvc3ZnPg==')",
+            },
+            animation: {
+              'marquee': 'marquee 30s linear infinite',
+            },
+            keyframes: {
+              marquee: {
+                '0%': { transform: 'translateX(0%)' },
+                '100%': { transform: 'translateX(-100%)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      body {
+        transition: background-color 0.5s cubic-bezier(0.19, 1, 0.22, 1), color 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8B5CF6; 
+      }
+      
+      /* View Transition Animation */
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal;
+      }
+      
+      ::view-transition-new(root) {
+        z-index: 2147483646;
+      }
+
+      /* Utilitaires pour le texte outline (fallback si besoin, mais moins utilisé maintenant) */
+      .text-outline-light {
+        -webkit-text-stroke: 1px rgba(0,0,0,0.8);
+        color: transparent;
+      }
+      .text-outline-dark {
+        -webkit-text-stroke: 1px rgba(255,255,255,0.8);
+        color: transparent;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.0.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-paper dark:bg-void text-ink dark:text-off-white">
+    <div id="root"></div>
+  </body>
+</html>
