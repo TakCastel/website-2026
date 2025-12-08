@@ -86,8 +86,8 @@ const Home: React.FC<HomeProps> = ({ lang, setHoveredProject }) => {
                       {lang === 'fr' ? 'Mon Rôle' : 'My Role'}
                    </div>
                    <div className="font-display text-2xl">
-                     {lang === 'fr' ? 'Architecte' : 'Architect'} <br/> 
-                     {lang === 'fr' ? 'Technique & Créatif' : 'Tech & Creative'}
+                     {lang === 'fr' ? 'Chef de projet' : 'Project Manager'} <br/> 
+                     {lang === 'fr' ? 'Technique & Créatif' : 'Technical & Creative'}
                    </div>
                 </div>
                 <div className="md:col-span-3 flex flex-col gap-4 text-ink dark:text-off-white">
@@ -239,16 +239,16 @@ const Home: React.FC<HomeProps> = ({ lang, setHoveredProject }) => {
                          : "I combine the best of both worlds: the technical and architectural rigor of an agency, with the flexibility and direct contact of a freelancer."}
                       <br/><br/>
                       {lang === 'fr' 
-                         ? "Vous bénéficiez d'une expertise technique pointue (Next.js, Architecture) sans la lourdeur administrative. Un partenariat basé sur l'efficacité."
-                         : "You benefit from sharp technical expertise (Next.js, Architecture) without administrative heaviness. A partnership based on efficiency."}
+                         ? "Nous travaillons ensemble pour réaliser votre projet. Une expertise technique au service de vos idées."
+                         : "We work together to realize your project. Technical expertise at the service of your ideas."}
                    </p>
 
                    <div className="flex gap-6 items-center">
                       <div className="flex items-center gap-2 text-sm font-bold opacity-80">
-                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Interlocuteur Unique' : 'Single Point of Contact'}
+                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Développement sur mesure' : 'Custom Development'}
                       </div>
                       <div className="flex items-center gap-2 text-sm font-bold opacity-80">
-                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Architecture Robuste' : 'Robust Architecture'}
+                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Tarifs adaptés' : 'Adapted Rates'}
                       </div>
                    </div>
                 </motion.div>
@@ -306,7 +306,7 @@ const Home: React.FC<HomeProps> = ({ lang, setHoveredProject }) => {
                          </span>
                       </div>
                       <h3 className="font-display text-2xl font-bold mb-2 text-ink dark:text-off-white">
-                         {lang === 'fr' ? 'Experts Satellites' : 'Satellite Experts'}
+                         {lang === 'fr' ? 'Experts Partenaires' : 'Partner Experts'}
                       </h3>
                       <p className="text-sm opacity-60 mb-6 uppercase tracking-widest text-ink dark:text-off-white">
                          {lang === 'fr' ? 'Activés selon le besoin' : 'Activated on demand'}
@@ -314,10 +314,10 @@ const Home: React.FC<HomeProps> = ({ lang, setHoveredProject }) => {
                       
                       <div className="grid grid-cols-2 gap-4">
                          <div className="bg-white/50 dark:bg-black/20 p-3 rounded text-xs font-bold text-center border border-black/5 dark:border-white/5 text-ink dark:text-off-white">
-                            Vidéo Cinema
+                            Réalisation Vidéo
                          </div>
                          <div className="bg-white/50 dark:bg-black/20 p-3 rounded text-xs font-bold text-center border border-black/5 dark:border-white/5 text-ink dark:text-off-white">
-                            Branding 3D
+                            Designer Graphic
                          </div>
                          <div className="bg-white/50 dark:bg-black/20 p-3 rounded text-xs font-bold text-center border border-black/5 dark:border-white/5 text-ink dark:text-off-white">
                             Print / PAO

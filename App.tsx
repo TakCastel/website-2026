@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { flushSync } from 'react-dom';
 import { HashRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,17 +8,17 @@ import ChatWidget from './components/ChatWidget';
 import LoadingScreen from './components/LoadingScreen';
 import { Language } from './types';
 
-// Importing Views
-import Home from './components/views/Home';
-import Projects from './components/views/Projects';
-import Services from './components/views/Services';
-import Contact from './components/views/Contact';
-import Estimate from './components/views/Estimate';
-import NotFound from './components/views/NotFound';
+// Lazy Loading Views for Performance
+const Home = lazy(() => import('./components/views/Home'));
+const Projects = lazy(() => import('./components/views/Projects'));
+const Services = lazy(() => import('./components/views/Services'));
+const Estimate = lazy(() => import('./components/views/Estimate'));
+const Contact = lazy(() => import('./components/views/Contact'));
+const NotFound = lazy(() => import('./components/views/NotFound'));
 
 type Theme = 'light' | 'dark';
 
-// Wrapper component to handle routing logic that needs hooks
+// Internal component that uses Router hooks
 const AppContent: React.FC = () => {
   // --- State & Init ---
   const location = useLocation();
@@ -193,7 +193,7 @@ const AppContent: React.FC = () => {
       
       {/* Loading Screen Overlay */}
       <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+        {isLoading && <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
       
       {/* Noise Texture Overlay */}
@@ -244,7 +244,8 @@ const AppContent: React.FC = () => {
               aria-label="Homepage"
             >
               <span className="group-hover:text-accent transition-colors duration-300 text-ink dark:text-off-white">TARIK.T</span>
-              <div className="w-2 h-2 bg-accent rounded-full animate-pulse shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+              {/* Static Square - No Pulse, No Rounded */}
+              <div className="w-2 h-2 bg-accent shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
             </Link>
             
             <nav className="hidden md:flex items-center gap-10">
@@ -312,6 +313,7 @@ const AppContent: React.FC = () => {
                 <Link 
                   key={item.path}
                   to={item.path}
+                  onClick={() => setMenuOpen(false)}
                   className="font-display text-5xl font-bold uppercase hover:text-accent transition-colors text-ink dark:text-off-white"
                 >
                   {UI_TEXT[lang][item.label as keyof typeof UI_TEXT['fr']]}
@@ -350,14 +352,16 @@ const AppContent: React.FC = () => {
         </AnimatePresence>
 
         <main className="max-w-[1920px] mx-auto min-h-screen">
-          <Routes>
-            <Route path="/" element={<Home lang={lang} setHoveredProject={setHoveredProject} />} />
-            <Route path="/projects" element={<Projects lang={lang} />} />
-            <Route path="/services" element={<Services lang={lang} />} />
-            <Route path="/estimate" element={<Estimate lang={lang} />} />
-            <Route path="/contact" element={<Contact lang={lang} />} />
-            <Route path="*" element={<NotFound lang={lang} />} />
-          </Routes>
+          <Suspense fallback={<div className="min-h-screen bg-paper dark:bg-void"></div>}>
+            <Routes>
+                <Route path="/" element={<Home lang={lang} setHoveredProject={setHoveredProject} />} />
+                <Route path="/projects" element={<Projects lang={lang} />} />
+                <Route path="/services" element={<Services lang={lang} />} />
+                <Route path="/estimate" element={<Estimate lang={lang} />} />
+                <Route path="/contact" element={<Contact lang={lang} />} />
+                <Route path="*" element={<NotFound lang={lang} />} />
+            </Routes>
+          </Suspense>
         </main>
 
         {/* Footer */}
@@ -389,6 +393,7 @@ const AppContent: React.FC = () => {
   );
 };
 
+// Main App Component wrapping everything in HashRouter
 const App: React.FC = () => {
   return (
     <HashRouter>
