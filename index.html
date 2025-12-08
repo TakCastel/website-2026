@@ -15,6 +15,11 @@
     <meta name="geo.position" content="43.9493;4.8055" />
     <meta name="ICBM" content="43.9493, 4.8055" />
     
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="business.business" />
     <meta property="og:title" content="Tarik Talhaoui | L'Alternative aux Agences Web Classiques" />
@@ -74,10 +79,6 @@
     }
     </script>
 
-    <!-- Calendly Widget -->
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -104,7 +105,7 @@
               'accent-light': '#A78BFA', // Violet-400 (pour les textes sur fond noir)
             },
             backgroundImage: {
-              'noise': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmaWxsZXIgaWQ9Im4iPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idHJhbnNwYXJlbnQiLz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjA1IiBmaWx0ZXI9InVybCgjbikzaIvPjwvc3ZnPg==')",
+              'noise': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxmaWxsZXIgaWQ9Im4iPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idHJhbnNwYXJlbnQiLz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbikzaIvPjwvc3ZnPg==')",
             },
             animation: {
               'marquee': 'marquee 30s linear infinite',
@@ -148,16 +149,6 @@
       ::view-transition-new(root) {
         z-index: 2147483646;
       }
-
-      /* Utilitaires pour le texte outline (fallback si besoin, mais moins utilisé maintenant) */
-      .text-outline-light {
-        -webkit-text-stroke: 1px rgba(0,0,0,0.8);
-        color: transparent;
-      }
-      .text-outline-dark {
-        -webkit-text-stroke: 1px rgba(255,255,255,0.8);
-        color: transparent;
-      }
     </style>
   <script type="importmap">
 {
@@ -167,9 +158,11 @@
     "react": "https://aistudiocdn.com/react@^19.2.1",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
     "react-dom": "https://aistudiocdn.com/react-dom@^19.2.1",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.22.3?external=react,react-dom",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
     "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
-    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.0.0"
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.0.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1"
   }
 }
 </script>

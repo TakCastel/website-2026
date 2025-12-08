@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { flushSync } from 'react-dom';
+import { HashRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon, Accessibility } from 'lucide-react';
 import { PROJECTS } from './constants';
@@ -12,18 +13,21 @@ import Home from './components/views/Home';
 import Projects from './components/views/Projects';
 import Services from './components/views/Services';
 import Contact from './components/views/Contact';
+import Estimate from './components/views/Estimate';
 import NotFound from './components/views/NotFound';
 
-type View = 'home' | 'projects' | 'services' | 'contact' | '404';
 type Theme = 'light' | 'dark';
 
-const App: React.FC = () => {
+// Wrapper component to handle routing logic that needs hooks
+const AppContent: React.FC = () => {
   // --- State & Init ---
+  const location = useLocation();
+  const navigate = useNavigate();
+  
   const [lang, setLang] = useState<Language>(() => 
     (typeof window !== 'undefined' ? localStorage.getItem('lang') as Language : 'fr') || 'fr'
   );
   
-  const [currentView, setCurrentView] = useState<View>('home');
   const [menuOpen, setMenuOpen] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
@@ -44,6 +48,7 @@ const App: React.FC = () => {
       home: 'Accueil',
       projects: 'Projets',
       services: 'Services',
+      estimate: 'Devis',
       contact: 'Contact',
       rights: 'Tous droits réservés.',
       location: 'Localisation'
@@ -52,27 +57,34 @@ const App: React.FC = () => {
       home: 'Home',
       projects: 'Projects',
       services: 'Services',
+      estimate: 'Quote',
       contact: 'Contact',
       rights: 'All Rights Reserved.',
       location: 'Location'
     }
   };
 
-  const navItems: View[] = ['home', 'projects', 'services', 'contact'];
+  const navItems = [
+    { path: '/', label: 'home' },
+    { path: '/projects', label: 'projects' },
+    { path: '/services', label: 'services' },
+    { path: '/estimate', label: 'estimate' },
+    { path: '/contact', label: 'contact' }
+  ];
 
   // --- Effects ---
 
-  // SEO: Update Document Title dynamically based on View
+  // SEO: Update Document Title dynamically based on Location
   useEffect(() => {
     const titles = {
-      home: lang === 'fr' ? 'Tarik Talhaoui | Product Builder & Dev Freelance Avignon' : 'Tarik Talhaoui | Product Builder & Freelance Dev',
-      projects: lang === 'fr' ? 'Réalisations & Portfolio | Tarik Talhaoui' : 'Selected Works & Portfolio | Tarik Talhaoui',
-      services: lang === 'fr' ? 'Services & Expertises (React, Next.js) | Tarik Talhaoui' : 'Services & Tech Stack | Tarik Talhaoui',
-      contact: lang === 'fr' ? 'Contactez un Expert Freelance | Tarik Talhaoui' : 'Contact a Freelance Expert | Tarik Talhaoui',
-      '404': 'Page Non Trouvée | 404'
+      '/': lang === 'fr' ? 'Tarik Talhaoui | Product Builder & Dev Freelance Avignon' : 'Tarik Talhaoui | Product Builder & Freelance Dev',
+      '/projects': lang === 'fr' ? 'Réalisations & Portfolio | Tarik Talhaoui' : 'Selected Works & Portfolio | Tarik Talhaoui',
+      '/services': lang === 'fr' ? 'Services & Expertises (React, Next.js) | Tarik Talhaoui' : 'Services & Tech Stack | Tarik Talhaoui',
+      '/estimate': lang === 'fr' ? 'Calculateur de Devis Web | Tarik Talhaoui' : 'Web Project Estimator | Tarik Talhaoui',
+      '/contact': lang === 'fr' ? 'Contactez un Expert Freelance | Tarik Talhaoui' : 'Contact a Freelance Expert | Tarik Talhaoui',
     };
-    document.title = titles[currentView] || titles['home'];
-  }, [currentView, lang]);
+    document.title = titles[location.pathname as keyof typeof titles] || 'Tarik Talhaoui';
+  }, [location, lang]);
 
   useEffect(() => {
     localStorage.setItem('lang', lang);
@@ -89,7 +101,7 @@ const App: React.FC = () => {
       root.classList.remove('dark');
       root.classList.add('light');
     }
-  }, []); // Run once on mount to set initial class, subsequent toggles handled in toggleTheme
+  }, []); 
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -105,13 +117,11 @@ const App: React.FC = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // --- Navigation & Data ---
-
-  const navigateTo = (view: View) => {
-    setCurrentView(view);
+  // Close menu on route change
+  useEffect(() => {
     setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, [location]);
 
   const toggleTheme = async (e: React.MouseEvent) => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -178,24 +188,6 @@ const App: React.FC = () => {
 
   const allProjects = PROJECTS.filter(p => p.id !== 'polinizz');
 
-  // View Router Logic
-  const renderView = () => {
-    switch (currentView) {
-      case 'home':
-        return <Home lang={lang} navigateTo={navigateTo} setHoveredProject={setHoveredProject} />;
-      case 'projects':
-        return <Projects lang={lang} />;
-      case 'services':
-        return <Services lang={lang} />;
-      case 'contact':
-        return <Contact lang={lang} />;
-      case '404':
-        return <NotFound lang={lang} onReturn={() => navigateTo('home')} />;
-      default:
-        return <NotFound lang={lang} onReturn={() => navigateTo('home')} />;
-    }
-  };
-
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 relative cursor-default bg-paper dark:bg-void text-ink dark:text-off-white selection:bg-accent selection:text-white overflow-x-hidden`}>
       
@@ -207,7 +199,7 @@ const App: React.FC = () => {
       {/* Noise Texture Overlay */}
       <div className="fixed inset-0 bg-noise opacity-[0.03] dark:opacity-[0.15] pointer-events-none z-50 mix-blend-overlay"></div>
 
-      {/* Floating Image Reveal (Custom Cursor Effect) - Only visible on Home usually, but kept global for potential reuse */}
+      {/* Floating Image Reveal (Custom Cursor Effect) */}
       <motion.div 
         className="fixed w-[300px] h-[200px] pointer-events-none z-40 rounded-lg overflow-hidden hidden md:block shadow-2xl border border-white/10"
         style={{ 
@@ -221,17 +213,18 @@ const App: React.FC = () => {
         transition={{ duration: 0.2 }}
       >
         {allProjects.map((p) => (
-           <img 
-             key={p.id}
-             src={p.image} 
-             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${hoveredProject === p.id ? 'opacity-100' : 'opacity-0'}`}
-             loading="lazy"
-             alt=""
-           />
+           p.id === hoveredProject && (
+             <img 
+               key={p.id}
+               src={p.image} 
+               className="absolute inset-0 w-full h-full object-cover"
+               alt=""
+             />
+           )
         ))}
       </motion.div>
 
-      {/* Main Content - Visible but potentially covered by loader initially */}
+      {/* Main Content */}
       <div className={isLoading ? "h-screen overflow-hidden" : ""}>
         {/* Navigation Header */}
         <motion.header 
@@ -245,33 +238,34 @@ const App: React.FC = () => {
           }`}
         >
           <div className="px-6 md:px-12 flex justify-between items-center max-w-[1920px] mx-auto">
-            <div 
-              className="font-display font-extrabold text-2xl tracking-tighter cursor-pointer flex items-center gap-2 group"
-              onClick={() => navigateTo('home')}
+            <Link 
+              to="/"
+              className="font-display font-extrabold text-2xl tracking-tighter cursor-pointer flex items-center gap-2 group bg-transparent border-none p-0 decoration-0"
               aria-label="Homepage"
             >
               <span className="group-hover:text-accent transition-colors duration-300 text-ink dark:text-off-white">TARIK.T</span>
               <div className="w-2 h-2 bg-accent rounded-full animate-pulse shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
-            </div>
+            </Link>
             
             <nav className="hidden md:flex items-center gap-10">
-              {navItems.map((view) => (
-                <button 
-                  key={view}
-                  onClick={() => navigateTo(view as View)}
-                  className={`text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors duration-300 relative group ${currentView === view ? 'text-accent' : 'text-ink dark:text-off-white opacity-60 hover:opacity-100'}`}
+              {navItems.map((item) => (
+                <Link 
+                  key={item.path}
+                  to={item.path}
+                  className={`text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors duration-300 relative group ${location.pathname === item.path ? 'text-accent' : 'text-ink dark:text-off-white opacity-60 hover:opacity-100'}`}
                 >
-                  {UI_TEXT[lang][view as keyof typeof UI_TEXT['fr']]}
-                  {currentView === view && (
+                  {UI_TEXT[lang][item.label as keyof typeof UI_TEXT['fr']]}
+                  {location.pathname === item.path && (
                     <motion.div layoutId="underline" className="absolute -bottom-1 left-0 right-0 h-[2px] bg-accent" />
                   )}
-                </button>
+                </Link>
               ))}
             </nav>
 
             <div className="flex items-center gap-4">
               <button 
                 onClick={toggleTheme} 
+                aria-label="Toggle Theme"
                 className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-ink dark:text-off-white relative overflow-hidden"
               >
                 <AnimatePresence mode="wait">
@@ -288,6 +282,7 @@ const App: React.FC = () => {
 
               <button 
                 onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} 
+                aria-label="Change Language"
                 className="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors w-8 text-ink dark:text-off-white"
               >
                 {lang}
@@ -296,6 +291,7 @@ const App: React.FC = () => {
               <button 
                 className="md:hidden text-ink dark:text-off-white" 
                 onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Menu"
               >
                 {menuOpen ? <X /> : <Menu />}
               </button>
@@ -312,14 +308,14 @@ const App: React.FC = () => {
               exit={{ opacity: 0, y: -20 }}
               className="fixed inset-0 bg-paper dark:bg-void z-40 flex flex-col justify-center items-center gap-8"
             >
-              {navItems.map((view) => (
-                <button 
-                  key={view}
-                  onClick={() => navigateTo(view as View)}
+              {navItems.map((item) => (
+                <Link 
+                  key={item.path}
+                  to={item.path}
                   className="font-display text-5xl font-bold uppercase hover:text-accent transition-colors text-ink dark:text-off-white"
                 >
-                  {UI_TEXT[lang][view as keyof typeof UI_TEXT['fr']]}
-                </button>
+                  {UI_TEXT[lang][item.label as keyof typeof UI_TEXT['fr']]}
+                </Link>
               ))}
             </motion.div>
           )}
@@ -336,7 +332,7 @@ const App: React.FC = () => {
                 initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                 className="bg-white dark:bg-surface border border-black/10 dark:border-white/10 p-8 rounded-xl max-w-md shadow-2xl relative"
               >
-                <button onClick={() => setShowA11yModal(false)} className="absolute top-4 right-4 hover:text-accent transition-colors text-ink dark:text-off-white"><X size={20}/></button>
+                <button onClick={() => setShowA11yModal(false)} className="absolute top-4 right-4 hover:text-accent transition-colors text-ink dark:text-off-white" aria-label="Close Modal"><X size={20}/></button>
                 <h3 className="font-display text-2xl font-bold mb-4 flex items-center gap-2 text-ink dark:text-off-white">
                     <Accessibility className="text-accent"/> Accessibility
                 </h3>
@@ -354,7 +350,14 @@ const App: React.FC = () => {
         </AnimatePresence>
 
         <main className="max-w-[1920px] mx-auto min-h-screen">
-          {renderView()}
+          <Routes>
+            <Route path="/" element={<Home lang={lang} setHoveredProject={setHoveredProject} />} />
+            <Route path="/projects" element={<Projects lang={lang} />} />
+            <Route path="/services" element={<Services lang={lang} />} />
+            <Route path="/estimate" element={<Estimate lang={lang} />} />
+            <Route path="/contact" element={<Contact lang={lang} />} />
+            <Route path="*" element={<NotFound lang={lang} />} />
+          </Routes>
         </main>
 
         {/* Footer */}
@@ -383,6 +386,14 @@ const App: React.FC = () => {
         <ChatWidget />
       </div>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <HashRouter>
+      <AppContent />
+    </HashRouter>
   );
 };
 

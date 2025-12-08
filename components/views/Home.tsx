@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useTransform, Variants } from 'framer-motion';
-import { ArrowDown, ArrowUpRight, Clapperboard, Palette, PenTool, Printer, Users, User, Share2, Layers, Zap, XCircle, CheckCircle, Monitor } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowDown, ArrowUpRight, Clapperboard, Palette, PenTool, Printer, Users, User, Share2, Layers, Zap, XCircle, CheckCircle, Monitor, Play } from 'lucide-react';
 import { PERSONAL_INFO, PROJECTS, TEAM_MEMBERS } from '../../constants';
 import { Language } from '../../types';
 
 interface HomeProps {
   lang: Language;
-  navigateTo: (view: any) => void;
   setHoveredProject: (id: string | null) => void;
 }
 
-const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
+const Home: React.FC<HomeProps> = ({ lang, setHoveredProject }) => {
+  const navigate = useNavigate();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 200]);
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
   const bgShapeY = useTransform(scrollY, [0, 1000], [0, -300]);
-
+  
   const featuredProject = PROJECTS.find(p => p.id === 'polinizz');
   const allProjects = PROJECTS.filter(p => p.id !== 'polinizz');
 
@@ -70,55 +71,59 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                   variants={itemVariants} 
                   className="font-display text-[13vw] leading-[0.8] font-bold uppercase tracking-tighter text-ink dark:text-off-white"
                >
-                 Builder
+                  Builder
                </motion.h1>
              </div>
 
              <motion.div variants={itemVariants} className="grid md:grid-cols-12 gap-8 mt-12 border-t border-black/10 dark:border-white/10 pt-8">
                 <div className="md:col-span-5">
-                   <p className="text-lg md:text-xl opacity-70 leading-relaxed font-light text-ink dark:text-off-white">
+                   <p className="text-lg md:text-xl opacity-80 leading-relaxed font-light text-ink dark:text-off-white">
                       {PERSONAL_INFO.bio[lang]}
                    </p>
                 </div>
                 <div className="md:col-span-3 md:col-start-7 flex flex-col gap-4 text-ink dark:text-off-white">
                    <div className="text-xs uppercase tracking-widest text-accent font-bold mb-2">
-                      {lang === 'fr' ? 'Rôle' : 'Role'}
+                      {lang === 'fr' ? 'Mon Rôle' : 'My Role'}
                    </div>
-                   <div className="font-display text-2xl">Lead Tech &<br/>Creative Dev</div>
+                   <div className="font-display text-2xl">
+                     {lang === 'fr' ? 'Architecte' : 'Architect'} <br/> 
+                     {lang === 'fr' ? 'Technique & Créatif' : 'Tech & Creative'}
+                   </div>
                 </div>
                 <div className="md:col-span-3 flex flex-col gap-4 text-ink dark:text-off-white">
                    <div className="text-xs uppercase tracking-widest text-accent font-bold mb-2">
-                      {lang === 'fr' ? 'Localisation' : 'Location'}
+                      {lang === 'fr' ? 'Disponible' : 'Location'}
                    </div>
-                   <div className="font-display text-2xl">Avignon,<br/>France</div>
+                   <div className="font-display text-2xl">Avignon<br/>& Remote</div>
                 </div>
              </motion.div>
 
              <motion.div variants={itemVariants} className="mt-20">
-                <button onClick={() => navigateTo('contact')} className="group flex items-center gap-4 text-xl font-display font-bold uppercase hover:text-accent transition-colors text-ink dark:text-off-white">
+                <Link to="/estimate" className="group flex items-center gap-4 text-xl font-display font-bold uppercase hover:text-accent transition-colors text-ink dark:text-off-white">
                    <span className="w-12 h-12 rounded-full border border-black/20 dark:border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent group-hover:text-white transition-all">
                       <ArrowDown className="group-hover:translate-y-1 transition-transform" />
                    </span>
-                   {lang === 'fr' ? 'Démarrer un projet' : 'Start a Project'}
-                </button>
+                   {lang === 'fr' ? 'Parlez-moi de votre projet' : 'Tell me about your project'}
+                </Link>
              </motion.div>
            </motion.div>
          </motion.div>
       </section>
 
       {/* MARQUEE */}
-      <div className="py-12 border-y border-black/5 dark:border-white/5 bg-white/50 dark:bg-black/20 overflow-hidden whitespace-nowrap flex">
+      <div className="py-12 border-y border-black/5 dark:border-white/5 bg-white/50 dark:bg-black/20 overflow-hidden whitespace-nowrap flex" aria-hidden="true">
          <motion.div 
            animate={{ x: [0, -1000] }} 
            transition={{ ease: "linear", duration: 30, repeat: Infinity }}
            className="flex gap-12 text-6xl md:text-8xl font-display font-bold uppercase text-black/5 dark:text-white/5"
          >
-           <span>React</span> <span>Next.js</span> <span>Node.js</span> <span>Design</span> <span>Strategy</span> <span>Architecture</span> <span>Creative</span>
-           <span>React</span> <span>Next.js</span> <span>Node.js</span> <span>Design</span> <span>Strategy</span> <span>Architecture</span> <span>Creative</span>
+            {/* Tech + Strategy Mix */}
+            <span>Product</span> <span>Strategy</span> <span>Design</span> <span>Next.js</span> <span>React</span> <span>Architecture</span> <span>Performance</span>
+            <span>Product</span> <span>Strategy</span> <span>Design</span> <span>Next.js</span> <span>React</span> <span>Architecture</span> <span>Performance</span>
          </motion.div>
       </div>
 
-      {/* POLINIZZ HIGHLIGHT - LIVE PREVIEW VERSION */}
+      {/* POLINIZZ HIGHLIGHT */}
       {featuredProject && (
         <section className="py-32 px-6 md:px-12 relative text-ink dark:text-off-white">
            <motion.div 
@@ -135,7 +140,13 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                  </div>
                  <h2 className="font-display text-5xl md:text-7xl font-bold uppercase">Polinizz</h2>
               </div>
-              <a href={featuredProject.link} target="_blank" className="hidden md:flex items-center gap-2 text-sm uppercase tracking-widest hover:text-accent transition-colors">
+              <a 
+                href={featuredProject.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hidden md:flex items-center gap-2 text-sm uppercase tracking-widest hover:text-accent transition-colors"
+                aria-label={lang === 'fr' ? 'Visiter le site Polinizz' : 'Visit Polinizz Website'}
+              >
                  {lang === 'fr' ? 'Visiter le site' : 'Visit Website'} <ArrowUpRight />
               </a>
            </motion.div>
@@ -157,27 +168,33 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                  </div>
               </div>
 
-              {/* Live Iframe */}
-              {featuredProject.link ? (
-                 <div className="w-full h-full pt-8 relative">
-                    {/* Overlay for non-clickable effect */}
-                    <a href={featuredProject.link} target="_blank" className="absolute inset-0 z-10 bg-transparent cursor-pointer" title="Open Website"></a>
-                    <iframe 
-                       src={featuredProject.link}
-                       loading="lazy"
-                       className="w-[200%] h-[200%] border-0 transform scale-50 origin-top-left pointer-events-none select-none bg-white"
-                       tabIndex={-1}
-                       title="Polinizz Live Preview"
-                    />
-                 </div>
-              ) : (
-                 <img 
+              {/* Simple Image with Hover Overlay */}
+              <div className="w-full h-full pt-8 relative bg-white dark:bg-zinc-900">
+                  <img 
                     src={featuredProject.image} 
                     alt="Polinizz App Interface" 
                     loading="lazy"
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 transform group-hover:scale-105"
-                 />
-              )}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    width={1200}
+                    height={800}
+                  />
+                  
+                  {featuredProject.link && (
+                    <a 
+                      href={featuredProject.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300"
+                    >
+                      <button 
+                        className="bg-accent text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest shadow-xl flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-accent-hover"
+                      >
+                        <ArrowUpRight strokeWidth={3} size={18} /> 
+                        {lang === 'fr' ? 'Voir le site' : 'Visit Website'}
+                      </button>
+                    </a>
+                  )}
+              </div>
               
               <div className="absolute bottom-12 left-6 md:left-12 max-w-2xl pointer-events-none z-20">
                  <div className="bg-black/60 dark:bg-black/60 backdrop-blur-md p-6 rounded-xl border border-white/10">
@@ -197,7 +214,7 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
         </section>
       )}
 
-      {/* STUDIO MODEL / PROCESS SECTION - REVISED */}
+      {/* STUDIO MODEL / PROCESS SECTION */}
       <section id="studio-model" className="py-24 px-6 md:px-12 border-t border-black/5 dark:border-white/5 bg-white dark:bg-black text-ink dark:text-off-white relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
              <div className="grid md:grid-cols-2 gap-16 items-start">
@@ -207,31 +224,31 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                    initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
                 >
                    <div className="inline-flex items-center gap-2 bg-accent/10 px-3 py-1 rounded-full text-accent text-xs font-bold uppercase tracking-widest mb-6">
-                      <Zap size={14} /> {lang === 'fr' ? 'L\'Approche Hybride' : 'The Hybrid Approach'}
+                      <Zap size={14} /> {lang === 'fr' ? 'L\'Alternative Agile' : 'The Agile Alternative'}
                    </div>
                    <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-8 leading-tight">
-                      {lang === 'fr' ? 'La puissance d\'une agence,' : 'Agency Power,'} <br/>
+                      {lang === 'fr' ? 'La qualité Agence,' : 'Agency Quality,'} <br/>
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-500">
-                         {lang === 'fr' ? 'L\'agilité freelance.' : 'Freelance Agility.'}
+                         {lang === 'fr' ? 'la proximité Freelance.' : 'Freelance Proximity.'}
                       </span>
                    </h2>
                    
                    <p className="text-lg opacity-70 leading-relaxed mb-8">
                       {lang === 'fr' 
-                         ? "Je ne vends pas de frais de structure. Je vends de l'expertise." 
-                         : "I don't sell overhead. I sell expertise."}
+                         ? "Je combine le meilleur des deux mondes : la rigueur technique et architecturale d'une agence, avec la souplesse et le contact direct d'un indépendant." 
+                         : "I combine the best of both worlds: the technical and architectural rigor of an agency, with the flexibility and direct contact of a freelancer."}
                       <br/><br/>
                       {lang === 'fr' 
-                         ? "Je suis votre interlocuteur unique, l'architecte et le développeur principal. Si le projet nécessite une excellence visuelle spécifique (vidéo cinéma, branding 3D), j'active mon équipe senior dédiée."
-                         : "I am your single point of contact, architect, and lead developer. If the project demands specific visual excellence (cinema-grade video, 3D branding), I plug in my dedicated senior squad."}
+                         ? "Vous bénéficiez d'une expertise technique pointue (Next.js, Architecture) sans la lourdeur administrative. Un partenariat basé sur l'efficacité."
+                         : "You benefit from sharp technical expertise (Next.js, Architecture) without administrative heaviness. A partnership based on efficiency."}
                    </p>
 
                    <div className="flex gap-6 items-center">
                       <div className="flex items-center gap-2 text-sm font-bold opacity-80">
-                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Experts Seniors uniquement' : 'Senior Experts Only'}
+                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Interlocuteur Unique' : 'Single Point of Contact'}
                       </div>
                       <div className="flex items-center gap-2 text-sm font-bold opacity-80">
-                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Transparence totale' : 'Total Transparency'}
+                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Architecture Robuste' : 'Robust Architecture'}
                       </div>
                    </div>
                 </motion.div>
@@ -248,21 +265,29 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                             <User size={24} className="text-white" />
                          </div>
                          <span className="text-xs font-bold uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full">
-                            {lang === 'fr' ? 'Le Cœur' : 'The Core'}
+                            {lang === 'fr' ? 'Votre Pilote' : 'Your Pilot'}
                          </span>
                       </div>
                       <h3 className="font-display text-2xl font-bold mb-2">Tarik Talhaoui</h3>
-                      <p className="text-sm opacity-60 mb-6 uppercase tracking-widest">Lead Tech & Product Builder</p>
+                      <div className="flex items-center gap-2 mb-6">
+                        <p className="text-sm opacity-60 uppercase tracking-widest">Product Builder</p>
+                        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                            <span className="text-[10px] font-bold text-green-500 uppercase tracking-wider">
+                                {lang === 'fr' ? 'Disponible' : 'Available'}
+                            </span>
+                        </div>
+                      </div>
                       
                       <ul className="space-y-3">
                          <li className="flex items-center gap-3 text-sm">
-                            <Zap size={16} className="text-accent" /> {lang === 'fr' ? 'Architecture & Code' : 'Architecture & Code'}
+                            <Zap size={16} className="text-accent" /> {lang === 'fr' ? 'Pilotage & Architecture' : 'Steering & Architecture'}
                          </li>
                          <li className="flex items-center gap-3 text-sm">
-                            <Zap size={16} className="text-accent" /> {lang === 'fr' ? 'Stratégie Produit' : 'Product Strategy'}
+                            <Zap size={16} className="text-accent" /> {lang === 'fr' ? 'Développement (Code)' : 'Development (Code)'}
                          </li>
                          <li className="flex items-center gap-3 text-sm">
-                            <Zap size={16} className="text-accent" /> {lang === 'fr' ? 'Qualité & Sécurité' : 'Quality & Security'}
+                            <Zap size={16} className="text-accent" /> {lang === 'fr' ? 'Partenaire Stratégique' : 'Strategic Partner'}
                          </li>
                       </ul>
                    </div>
@@ -277,28 +302,28 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                             <Users size={24} />
                          </div>
                          <span className="text-xs font-bold uppercase tracking-widest bg-accent/10 text-accent px-3 py-1 rounded-full">
-                            {lang === 'fr' ? 'À la carte' : 'On Demand'}
+                            {lang === 'fr' ? 'En renfort' : 'Reinforcement'}
                          </span>
                       </div>
                       <h3 className="font-display text-2xl font-bold mb-2 text-ink dark:text-off-white">
-                         {lang === 'fr' ? 'Le Commando' : 'The Squad'}
+                         {lang === 'fr' ? 'Experts Satellites' : 'Satellite Experts'}
                       </h3>
                       <p className="text-sm opacity-60 mb-6 uppercase tracking-widest text-ink dark:text-off-white">
-                         {lang === 'fr' ? 'Experts Seniors Uniquement' : 'Senior Experts Only'}
+                         {lang === 'fr' ? 'Activés selon le besoin' : 'Activated on demand'}
                       </p>
                       
                       <div className="grid grid-cols-2 gap-4">
                          <div className="bg-white/50 dark:bg-black/20 p-3 rounded text-xs font-bold text-center border border-black/5 dark:border-white/5 text-ink dark:text-off-white">
-                            Video Cinema
+                            Vidéo Cinema
                          </div>
                          <div className="bg-white/50 dark:bg-black/20 p-3 rounded text-xs font-bold text-center border border-black/5 dark:border-white/5 text-ink dark:text-off-white">
                             Branding 3D
                          </div>
                          <div className="bg-white/50 dark:bg-black/20 p-3 rounded text-xs font-bold text-center border border-black/5 dark:border-white/5 text-ink dark:text-off-white">
-                            Motion Design
+                            Print / PAO
                          </div>
                          <div className="bg-white/50 dark:bg-black/20 p-3 rounded text-xs font-bold text-center border border-black/5 dark:border-white/5 text-ink dark:text-off-white">
-                            Print / PAO
+                            Motion Design
                          </div>
                       </div>
                    </div>
@@ -316,15 +341,15 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
             className="mb-16"
           >
              <div className="text-accent font-bold text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                <span className="w-8 h-[1px] bg-accent"></span> {lang === 'fr' ? 'Mon Équipe Satellite' : 'Satellite Team'}
+                <span className="w-8 h-[1px] bg-accent"></span> {lang === 'fr' ? 'Mon Réseau' : 'My Network'}
              </div>
              <h2 className="font-display text-4xl md:text-5xl font-bold uppercase mb-6">
                 {lang === 'fr' ? 'Le Collectif' : 'The Collective'}
              </h2>
              <p className="text-lg opacity-60 max-w-2xl">
                 {lang === 'fr' 
-                  ? "Pour garantir un résultat d'exception, je m'entoure des meilleurs artisans numériques de la région." 
-                  : "To guarantee exceptional results, I surround myself with the region's best digital craftsmen."}
+                  ? "Pour garantir un résultat d'exception sur les aspects créatifs très spécifiques, je m'entoure des meilleurs artisans numériques." 
+                  : "To guarantee exceptional results on very specific creative aspects, I surround myself with the best digital craftsmen."}
              </p>
           </motion.div>
 
@@ -358,9 +383,9 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
             className="flex items-end justify-between mb-20 border-b border-black/10 dark:border-white/10 pb-8"
          >
             <h2 className="font-display text-4xl font-bold uppercase">{lang === 'fr' ? 'Sélection de travaux' : 'Selected Works'}</h2>
-            <button onClick={() => navigateTo('projects')} className="text-sm uppercase tracking-widest hover:text-accent transition-colors">
+            <Link to="/projects" className="text-sm uppercase tracking-widest hover:text-accent transition-colors">
                {lang === 'fr' ? 'Voir tout' : 'View All'} ({PROJECTS.length})
-            </button>
+            </Link>
          </motion.div>
 
          <div className="flex flex-col">

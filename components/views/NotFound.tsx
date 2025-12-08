@@ -1,13 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Language } from '../../types';
 
 interface NotFoundProps {
   lang: Language;
-  onReturn: () => void;
+  onReturn?: () => void; // Optional now since we use hook primarily, but kept for interface compat if needed
 }
 
-const NotFound: React.FC<NotFoundProps> = ({ lang, onReturn }) => {
+const NotFound: React.FC<NotFoundProps> = ({ lang }) => {
+  const navigate = useNavigate();
+  
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-6 text-center text-ink dark:text-off-white">
       <motion.h1 
@@ -21,7 +24,7 @@ const NotFound: React.FC<NotFoundProps> = ({ lang, onReturn }) => {
         {lang === 'fr' ? 'Page Introuvable' : 'Page Not Found'}
       </h2>
       <button 
-        onClick={onReturn}
+        onClick={() => navigate('/')}
         className="px-8 py-4 border border-black/20 dark:border-white/20 hover:bg-accent hover:border-accent hover:text-white transition-all uppercase tracking-widest text-sm font-bold rounded"
       >
         {lang === 'fr' ? "Retour à l'accueil" : "Return Home"}

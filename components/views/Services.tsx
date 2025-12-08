@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Shield, Workflow, CheckCircle } from 'lucide-react';
+import { Terminal, Shield, Workflow, CheckCircle, Calculator } from 'lucide-react';
 import { SKILLS_DATA, SERVICES, PROCESS_STEPS, CAREER_STORY, TECH_DEFINITIONS } from '../../constants';
 import { Language } from '../../types';
+import { Link } from 'react-router-dom';
 
 interface ServicesProps {
   lang: Language;
@@ -142,7 +143,7 @@ const Services: React.FC<ServicesProps> = ({ lang }) => {
           <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-16 text-center">
               {lang === 'fr' ? 'Services' : 'Services'}
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-32">
               {SERVICES.map((service, idx) => (
                  <motion.div 
                     key={idx} 
@@ -168,6 +169,32 @@ const Services: React.FC<ServicesProps> = ({ lang }) => {
                  </motion.div>
               ))}
            </div>
+           
+           {/* ESTIMATE CTA */}
+           <motion.div
+             initial={{ opacity: 0, y: 50 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             className="bg-black/5 dark:bg-white/5 rounded-2xl p-12 text-center"
+           >
+              <div className="mb-8 flex justify-center opacity-20">
+                  <Calculator size={80} />
+              </div>
+              <h3 className="font-display text-3xl md:text-4xl font-bold uppercase mb-6">
+                {lang === 'fr' ? 'Vous avez un projet en tête ?' : 'Have a project in mind?'}
+              </h3>
+              <p className="opacity-60 max-w-2xl mx-auto mb-8 text-lg">
+                {lang === 'fr' 
+                  ? "Estimez le budget de votre futur site en quelques clics grâce à mon configurateur en ligne." 
+                  : "Estimate your future website budget in a few clicks with my online configurator."}
+              </p>
+              <Link 
+                to="/estimate"
+                className="inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest shadow-lg hover:bg-accent-hover transition-colors"
+              >
+                  {lang === 'fr' ? 'Estimer mon projet' : 'Estimate my project'}
+              </Link>
+           </motion.div>
        </div>
     </div>
   );
