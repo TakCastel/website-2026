@@ -205,7 +205,7 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                          <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Experts Seniors uniquement' : 'Senior Experts Only'}
                       </div>
                       <div className="flex items-center gap-2 text-sm font-bold opacity-80">
-                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Pas de frais cachés' : 'No hidden fees'}
+                         <CheckCircle className="text-green-500" size={18} /> {lang === 'fr' ? 'Transparence totale' : 'Total Transparency'}
                       </div>
                    </div>
                 </motion.div>

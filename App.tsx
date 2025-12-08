@@ -58,6 +58,18 @@ const App: React.FC = () => {
 
   // --- Effects ---
 
+  // SEO: Update Document Title dynamically based on View
+  useEffect(() => {
+    const titles = {
+      home: lang === 'fr' ? 'Tarik Talhaoui | Product Builder & Dev Freelance Avignon' : 'Tarik Talhaoui | Product Builder & Freelance Dev',
+      projects: lang === 'fr' ? 'Réalisations & Portfolio | Tarik Talhaoui' : 'Selected Works & Portfolio | Tarik Talhaoui',
+      services: lang === 'fr' ? 'Services & Expertises (React, Next.js) | Tarik Talhaoui' : 'Services & Tech Stack | Tarik Talhaoui',
+      contact: lang === 'fr' ? 'Contactez un Expert Freelance | Tarik Talhaoui' : 'Contact a Freelance Expert | Tarik Talhaoui',
+      '404': 'Page Non Trouvée | 404'
+    };
+    document.title = titles[currentView] || titles['home'];
+  }, [currentView, lang]);
+
   useEffect(() => {
     localStorage.setItem('lang', lang);
   }, [lang]);
