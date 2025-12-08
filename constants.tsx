@@ -15,7 +15,8 @@ import {
   Lock,
   PenTool,
   Video,
-  Palette
+  Palette,
+  GraduationCap
 } from 'lucide-react';
 
 export const PERSONAL_INFO = {
@@ -211,10 +212,12 @@ export const PRICING_CONFIG = [
     basePrice: 900,
     description: { en: "Single page to convert visitors.", fr: "Une page unique optimisée pour convertir vos visiteurs." },
     options: [
-      { id: 'design_premium', category: 'design', label: { en: "Premium UI/UX", fr: "Design Premium & Animé" }, price: 400 },
+      { id: 'design_premium', category: 'design', label: { en: "Premium UI/UX & Motion", fr: "Design Premium & Animé" }, price: 400 },
       { id: 'copywriting', category: 'marketing', label: { en: "Copywriting", fr: "Rédaction Persuasive" }, price: 300 },
-      { id: 'form_advanced', category: 'tech', label: { en: "Advanced Form (CRM)", fr: "Formulaire Avancé (Lien CRM)" }, price: 250 },
-      { id: 'analytics', category: 'marketing', label: { en: "Advanced Analytics", fr: "Analytics & Tracking" }, price: 200 }
+      { id: 'form_advanced', category: 'tech', label: { en: "CRM Integration", fr: "Liaison CRM & Formulaire Avancé" }, price: 250 },
+      { id: 'analytics', category: 'marketing', label: { en: "Advanced Analytics", fr: "Analytics & Tracking" }, price: 200 },
+      { id: 'abtesting', category: 'tech', label: { en: "A/B Testing Setup", fr: "Config A/B Testing" }, price: 350 },
+      { id: 'rgpd', category: 'tech', label: { en: "RGPD Compliance", fr: "Conformité RGPD" }, price: 150 }
     ]
   },
   {
@@ -223,11 +226,13 @@ export const PRICING_CONFIG = [
     basePrice: 1600,
     description: { en: "Complete presence (Home, About, Services, Contact).", fr: "Présence complète (Accueil, A Propos, Services, Contact)." },
     options: [
-      { id: 'cms', category: 'tech', label: { en: "CMS (Admin Panel)", fr: "Interface d'administration" }, price: 500 },
-      { id: 'seo', category: 'marketing', label: { en: "SEO Start Pack", fr: "Pack Référencement Local" }, price: 450 },
+      { id: 'cms', category: 'tech', label: { en: "CMS (Admin Panel)", fr: "Interface d'administration sur-mesure" }, price: 500 },
+      { id: 'map', category: 'tech', label: { en: "Interactive Map", fr: "Carte Interactive / Store Locator" }, price: 250 },
+      { id: 'seo', category: 'marketing', label: { en: "Local SEO Pack", fr: "Pack Référencement Local" }, price: 450 },
+      { id: 'reviews', category: 'marketing', label: { en: "Reviews Integration", fr: "Intégration Avis Clients (Google/Trust)" }, price: 200 },
       { id: 'multi', category: 'tech', label: { en: "Multi-language", fr: "Multi-langues" }, price: 400 },
       { id: 'blog', category: 'content', label: { en: "Blog Section", fr: "Espace Blog / Actualités" }, price: 300 },
-      { id: 'motion', category: 'design', label: { en: "Creative Motion", fr: "Animations Créatives" }, price: 600 }
+      { id: 'training_content', category: 'support', label: { en: "CMS Training (2h)", fr: "Formation Gestion Contenu (2h)" }, price: 180 }
     ]
   },
   {
@@ -239,7 +244,11 @@ export const PRICING_CONFIG = [
       { id: 'payment', category: 'tech', label: { en: "Stripe/PayPal Setup", fr: "Config Paiements Sécurisés" }, price: 400 },
       { id: 'products_import', category: 'content', label: { en: "Product Import (50+)", fr: "Import Produits (50+)" }, price: 500 },
       { id: 'filter', category: 'tech', label: { en: "Advanced Filtering", fr: "Filtres de recherche avancés" }, price: 600 },
-      { id: 'newsletter', category: 'marketing', label: { en: "Newsletter Integration", fr: "Intégration Newsletter" }, price: 300 }
+      { id: 'newsletter', category: 'marketing', label: { en: "Newsletter Integration", fr: "Intégration Newsletter" }, price: 300 },
+      { id: 'loyalty', category: 'marketing', label: { en: "Loyalty Program", fr: "Système de Fidélité" }, price: 450 },
+      { id: 'abandoned_cart', category: 'marketing', label: { en: "Abandoned Cart Recovery", fr: "Relance Paniers Abandonnés" }, price: 350 },
+      { id: 'b2b', category: 'tech', label: { en: "B2B Mode (Quotes/TVA)", fr: "Mode B2B (Devis/TVA)" }, price: 600 },
+      { id: 'training_shop', category: 'support', label: { en: "Shop Management Training", fr: "Formation Gestion Boutique" }, price: 250 }
     ]
   },
   {
@@ -248,10 +257,14 @@ export const PRICING_CONFIG = [
     basePrice: 6000,
     description: { en: "SaaS, internal tool, complex logic.", fr: "SaaS, outil métier, logique complexe." },
     options: [
-      { id: 'auth', category: 'tech', label: { en: "User Auth", fr: "Authentification Utilisateurs" }, price: 800 },
+      { id: 'auth', category: 'tech', label: { en: "User Auth & Roles", fr: "Auth & Gestion des Rôles" }, price: 800 },
       { id: 'dashboard', category: 'tech', label: { en: "Admin Dashboard", fr: "Tableau de bord Admin" }, price: 1200 },
-      { id: 'api', category: 'tech', label: { en: "External API", fr: "Connexion API Tiers" }, price: 1000 },
-      { id: 'pwa', category: 'tech', label: { en: "Mobile App (PWA)", fr: "Version Mobile (PWA)" }, price: 1500 }
+      { id: 'notifications', category: 'tech', label: { en: "Real-time Notifications", fr: "Notifications Temps Réel" }, price: 500 },
+      { id: 'api', category: 'tech', label: { en: "External API Connect", fr: "Connexion API Tiers (ERP/CRM)" }, price: 1000 },
+      { id: 'pwa', category: 'tech', label: { en: "Mobile App (PWA)", fr: "Version Mobile (PWA)" }, price: 1500 },
+      { id: 'testing', category: 'tech', label: { en: "E2E Testing", fr: "Tests Automatisés (E2E)" }, price: 600 },
+      { id: 'docs', category: 'support', label: { en: "Technical Docs", fr: "Documentation Technique" }, price: 400 },
+      { id: 'training_admin', category: 'support', label: { en: "Admin Training", fr: "Formation Administrateur" }, price: 300 }
     ]
   }
 ];
@@ -407,5 +420,5 @@ export const PROJECTS: Project[] = [
 ];
 
 export const ICONS: Record<string, React.FC<any>> = {
-  Code2, Rocket, Users, Layout, Database, Smartphone, Globe, Search, ShieldAlert, Terminal, Cpu, Lock, Palette, Video, PenTool
+  Code2, Rocket, Users, Layout, Database, Smartphone, Globe, Search, ShieldAlert, Terminal, Cpu, Lock, Palette, Video, PenTool, GraduationCap
 };

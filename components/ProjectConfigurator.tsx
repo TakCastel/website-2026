@@ -5,7 +5,8 @@ import { Language } from '../types';
 import { 
     Check, Download, Send, Calculator, FileText, 
     ArrowRight, ChevronLeft, Layout, ShoppingCart, 
-    Layers, Zap, Palette, Globe, Smartphone, Server 
+    Layers, Zap, Palette, Globe, Smartphone, Server,
+    GraduationCap
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { useNavigate } from 'react-router-dom';
@@ -21,14 +22,16 @@ const CATEGORY_ICONS: Record<string, React.FC<any>> = {
     'design': Palette,
     'tech': Server,
     'marketing': Globe,
-    'content': FileText
+    'content': FileText,
+    'support': GraduationCap
 };
 
 const CATEGORY_LABELS: Record<string, { en: string, fr: string }> = {
     'design': { en: 'Design & UX', fr: 'Design & Apparence' },
     'tech': { en: 'Tech & Features', fr: 'Technique & Fonctions' },
     'marketing': { en: 'Marketing & SEO', fr: 'Marketing & Visibilité' },
-    'content': { en: 'Content & Data', fr: 'Contenu & Données' }
+    'content': { en: 'Content & Data', fr: 'Contenu & Données' },
+    'support': { en: 'Training & Support', fr: 'Formation & Support' }
 };
 
 const TYPE_ICONS: Record<string, React.FC<any>> = {
