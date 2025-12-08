@@ -41,8 +41,12 @@ const Projects: React.FC<ProjectsProps> = ({ lang }) => {
                       <div className="w-2 h-2 rounded-full bg-red-400"></div>
                       <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
                       <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                      <div className="ml-auto flex items-center gap-1 opacity-50 text-[10px] font-mono uppercase">
-                          <Monitor size={10} /> Live Preview
+                      <div className="ml-auto flex items-center gap-1.5 opacity-70 text-[10px] font-mono uppercase text-green-600 dark:text-green-400 font-bold">
+                          <div className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                          </div>
+                          Live
                       </div>
                   </div>
 
@@ -56,7 +60,7 @@ const Projects: React.FC<ProjectsProps> = ({ lang }) => {
                             src={project.link}
                             title={project.title[lang]}
                             loading="lazy"
-                            className="w-[200%] h-[200%] border-0 transform scale-50 origin-top-left pointer-events-none select-none"
+                            className="w-[200%] h-[200%] border-0 transform scale-50 origin-top-left pointer-events-none select-none bg-white"
                             tabIndex={-1}
                         />
                     </div>

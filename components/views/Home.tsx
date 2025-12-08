@@ -165,7 +165,8 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
                     <iframe 
                        src={featuredProject.link}
                        loading="lazy"
-                       className="w-full h-full border-0 pointer-events-none select-none bg-white"
+                       className="w-[200%] h-[200%] border-0 transform scale-50 origin-top-left pointer-events-none select-none bg-white"
+                       tabIndex={-1}
                        title="Polinizz Live Preview"
                     />
                  </div>

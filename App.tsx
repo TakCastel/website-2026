@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon, Accessibility } from 'lucide-react';
 import { PROJECTS } from './constants';
 import ChatWidget from './components/ChatWidget';
+import LoadingScreen from './components/LoadingScreen';
 import { Language } from './types';
 
 // Importing Views
@@ -27,6 +28,9 @@ const App: React.FC = () => {
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [scrolled, setScrolled] = useState(false);
+  
+  // Loading State
+  const [isLoading, setIsLoading] = useState(true);
   
   const [theme, setTheme] = useState<Theme>(() => 
     (typeof window !== 'undefined' ? localStorage.getItem('theme') as Theme : 'dark') || 'dark'
@@ -195,6 +199,11 @@ const App: React.FC = () => {
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 relative cursor-default bg-paper dark:bg-void text-ink dark:text-off-white selection:bg-accent selection:text-white overflow-x-hidden`}>
       
+      {/* Loading Screen Overlay */}
+      <AnimatePresence mode="wait">
+        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+      
       {/* Noise Texture Overlay */}
       <div className="fixed inset-0 bg-noise opacity-[0.03] dark:opacity-[0.15] pointer-events-none z-50 mix-blend-overlay"></div>
 
@@ -222,154 +231,157 @@ const App: React.FC = () => {
         ))}
       </motion.div>
 
-      {/* Navigation Header */}
-      <motion.header 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
-          scrolled 
-            ? 'bg-white/80 dark:bg-void/80 backdrop-blur-xl py-4 border-black/5 dark:border-white/5 shadow-sm' 
-            : 'bg-transparent py-8 border-transparent'
-        }`}
-      >
-        <div className="px-6 md:px-12 flex justify-between items-center max-w-[1920px] mx-auto">
-          <div 
-            className="font-display font-extrabold text-2xl tracking-tighter cursor-pointer flex items-center gap-2 group"
-            onClick={() => navigateTo('home')}
-            aria-label="Homepage"
-          >
-            <span className="group-hover:text-accent transition-colors duration-300 text-ink dark:text-off-white">TARIK.T</span>
-            <div className="w-2 h-2 bg-accent rounded-full animate-pulse shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
-          </div>
-          
-          <nav className="hidden md:flex items-center gap-10">
-            {navItems.map((view) => (
+      {/* Main Content - Visible but potentially covered by loader initially */}
+      <div className={isLoading ? "h-screen overflow-hidden" : ""}>
+        {/* Navigation Header */}
+        <motion.header 
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: isLoading ? 0 : 0.5 }}
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
+            scrolled 
+              ? 'bg-white/80 dark:bg-void/80 backdrop-blur-xl py-4 border-black/5 dark:border-white/5 shadow-sm' 
+              : 'bg-transparent py-8 border-transparent'
+          }`}
+        >
+          <div className="px-6 md:px-12 flex justify-between items-center max-w-[1920px] mx-auto">
+            <div 
+              className="font-display font-extrabold text-2xl tracking-tighter cursor-pointer flex items-center gap-2 group"
+              onClick={() => navigateTo('home')}
+              aria-label="Homepage"
+            >
+              <span className="group-hover:text-accent transition-colors duration-300 text-ink dark:text-off-white">TARIK.T</span>
+              <div className="w-2 h-2 bg-accent rounded-full animate-pulse shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+            </div>
+            
+            <nav className="hidden md:flex items-center gap-10">
+              {navItems.map((view) => (
+                <button 
+                  key={view}
+                  onClick={() => navigateTo(view as View)}
+                  className={`text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors duration-300 relative group ${currentView === view ? 'text-accent' : 'text-ink dark:text-off-white opacity-60 hover:opacity-100'}`}
+                >
+                  {UI_TEXT[lang][view as keyof typeof UI_TEXT['fr']]}
+                  {currentView === view && (
+                    <motion.div layoutId="underline" className="absolute -bottom-1 left-0 right-0 h-[2px] bg-accent" />
+                  )}
+                </button>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-4">
               <button 
-                key={view}
-                onClick={() => navigateTo(view as View)}
-                className={`text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors duration-300 relative group ${currentView === view ? 'text-accent' : 'text-ink dark:text-off-white opacity-60 hover:opacity-100'}`}
+                onClick={toggleTheme} 
+                className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-ink dark:text-off-white relative overflow-hidden"
               >
-                {UI_TEXT[lang][view as keyof typeof UI_TEXT['fr']]}
-                {currentView === view && (
-                  <motion.div layoutId="underline" className="absolute -bottom-1 left-0 right-0 h-[2px] bg-accent" />
-                )}
+                <AnimatePresence mode="wait">
+                    {theme === 'light' ? 
+                      <motion.div key="moon" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
+                        <Moon size={18} />
+                      </motion.div> : 
+                      <motion.div key="sun" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }}>
+                        <Sun size={18} />
+                      </motion.div>
+                    }
+                </AnimatePresence>
               </button>
-            ))}
-          </nav>
 
-          <div className="flex items-center gap-4">
-            <button 
-               onClick={toggleTheme} 
-               className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-ink dark:text-off-white relative overflow-hidden"
-            >
-               <AnimatePresence mode="wait">
-                  {theme === 'light' ? 
-                    <motion.div key="moon" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-                       <Moon size={18} />
-                    </motion.div> : 
-                    <motion.div key="sun" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }}>
-                       <Sun size={18} />
-                    </motion.div>
-                  }
-               </AnimatePresence>
-            </button>
+              <button 
+                onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} 
+                className="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors w-8 text-ink dark:text-off-white"
+              >
+                {lang}
+              </button>
 
-            <button 
-               onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')} 
-               className="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors w-8 text-ink dark:text-off-white"
-            >
-              {lang}
-            </button>
-
-            <button 
-               className="md:hidden text-ink dark:text-off-white" 
-               onClick={() => setMenuOpen(!menuOpen)}
-            >
-               {menuOpen ? <X /> : <Menu />}
-            </button>
+              <button 
+                className="md:hidden text-ink dark:text-off-white" 
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                {menuOpen ? <X /> : <Menu />}
+              </button>
+            </div>
           </div>
-        </div>
-      </motion.header>
+        </motion.header>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed inset-0 bg-paper dark:bg-void z-40 flex flex-col justify-center items-center gap-8"
+            >
+              {navItems.map((view) => (
+                <button 
+                  key={view}
+                  onClick={() => navigateTo(view as View)}
+                  className="font-display text-5xl font-bold uppercase hover:text-accent transition-colors text-ink dark:text-off-white"
+                >
+                  {UI_TEXT[lang][view as keyof typeof UI_TEXT['fr']]}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* A11y Modal */}
+        <AnimatePresence>
+        {showA11yModal && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 bg-paper dark:bg-void z-40 flex flex-col justify-center items-center gap-8"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
           >
-             {navItems.map((view) => (
-              <button 
-                key={view}
-                onClick={() => navigateTo(view as View)}
-                className="font-display text-5xl font-bold uppercase hover:text-accent transition-colors text-ink dark:text-off-white"
+              <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                className="bg-white dark:bg-surface border border-black/10 dark:border-white/10 p-8 rounded-xl max-w-md shadow-2xl relative"
               >
-                {UI_TEXT[lang][view as keyof typeof UI_TEXT['fr']]}
-              </button>
-            ))}
+                <button onClick={() => setShowA11yModal(false)} className="absolute top-4 right-4 hover:text-accent transition-colors text-ink dark:text-off-white"><X size={20}/></button>
+                <h3 className="font-display text-2xl font-bold mb-4 flex items-center gap-2 text-ink dark:text-off-white">
+                    <Accessibility className="text-accent"/> Accessibility
+                </h3>
+                <p className="text-sm opacity-80 mb-6 leading-relaxed text-ink dark:text-off-white">
+                    {lang === 'fr' 
+                    ? "Je m'engage à rendre ce portfolio accessible. Standards sémantiques HTML5, contrastes vérifiés et navigation clavier."
+                    : "Committed to accessibility. Semantic HTML5, checked contrasts, and keyboard navigation."}
+                </p>
+                <button onClick={() => setShowA11yModal(false)} className="w-full py-3 bg-accent text-white font-bold uppercase tracking-widest text-xs rounded hover:opacity-90 transition-opacity">
+                    {lang === 'fr' ? 'Compris' : 'Understood'}
+                </button>
+              </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>
 
-      {/* A11y Modal */}
-      <AnimatePresence>
-      {showA11yModal && (
-         <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-         >
-            <motion.div 
-               initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-               className="bg-white dark:bg-surface border border-black/10 dark:border-white/10 p-8 rounded-xl max-w-md shadow-2xl relative"
-            >
-               <button onClick={() => setShowA11yModal(false)} className="absolute top-4 right-4 hover:text-accent transition-colors text-ink dark:text-off-white"><X size={20}/></button>
-               <h3 className="font-display text-2xl font-bold mb-4 flex items-center gap-2 text-ink dark:text-off-white">
-                  <Accessibility className="text-accent"/> Accessibility
-               </h3>
-               <p className="text-sm opacity-80 mb-6 leading-relaxed text-ink dark:text-off-white">
-                  {lang === 'fr' 
-                   ? "Je m'engage à rendre ce portfolio accessible. Standards sémantiques HTML5, contrastes vérifiés et navigation clavier."
-                   : "Committed to accessibility. Semantic HTML5, checked contrasts, and keyboard navigation."}
-               </p>
-               <button onClick={() => setShowA11yModal(false)} className="w-full py-3 bg-accent text-white font-bold uppercase tracking-widest text-xs rounded hover:opacity-90 transition-opacity">
-                  {lang === 'fr' ? 'Compris' : 'Understood'}
-               </button>
-            </motion.div>
-         </motion.div>
-      )}
-      </AnimatePresence>
+        <main className="max-w-[1920px] mx-auto min-h-screen">
+          {renderView()}
+        </main>
 
-      <main className="max-w-[1920px] mx-auto min-h-screen">
-        {renderView()}
-      </main>
+        {/* Footer */}
+        <footer className="px-6 md:px-12 py-12 border-t border-black/10 dark:border-white/10 mt-20 bg-paper dark:bg-surface text-ink dark:text-off-white">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+              <div className="flex flex-col gap-4">
+                  <span className="font-display font-bold text-2xl">Tarik.T</span>
+                  <span className="text-xs opacity-50 uppercase tracking-widest">© 2025 {UI_TEXT[lang].rights}</span>
+              </div>
+              
+              <div className="flex flex-col items-end gap-4">
+                  <button 
+                      onClick={() => setShowA11yModal(true)}
+                      className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-50 hover:text-accent transition-colors"
+                  >
+                      <Accessibility size={14} /> {lang === 'fr' ? 'Accessibilité' : 'Accessibility'}
+                  </button>
+                  <div className="text-right">
+                      <div className="text-xs opacity-50 uppercase tracking-widest mb-1">{UI_TEXT[lang].location}</div>
+                      <div className="font-display font-bold">Avignon, France</div>
+                  </div>
+              </div>
+          </div>
+        </footer>
 
-      {/* Footer */}
-      <footer className="px-6 md:px-12 py-12 border-t border-black/10 dark:border-white/10 mt-20 bg-paper dark:bg-surface text-ink dark:text-off-white">
-         <div className="flex flex-col md:flex-row justify-between items-end gap-8">
-             <div className="flex flex-col gap-4">
-                <span className="font-display font-bold text-2xl">Tarik.T</span>
-                <span className="text-xs opacity-50 uppercase tracking-widest">© 2025 {UI_TEXT[lang].rights}</span>
-             </div>
-             
-             <div className="flex flex-col items-end gap-4">
-                 <button 
-                     onClick={() => setShowA11yModal(true)}
-                     className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-50 hover:text-accent transition-colors"
-                 >
-                     <Accessibility size={14} /> {lang === 'fr' ? 'Accessibilité' : 'Accessibility'}
-                 </button>
-                <div className="text-right">
-                    <div className="text-xs opacity-50 uppercase tracking-widest mb-1">{UI_TEXT[lang].location}</div>
-                    <div className="font-display font-bold">Avignon, France</div>
-                </div>
-             </div>
-         </div>
-      </footer>
-
-      <ChatWidget />
+        <ChatWidget />
+      </div>
     </div>
   );
 };

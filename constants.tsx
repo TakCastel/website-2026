@@ -210,7 +210,7 @@ export const PROJECTS: Project[] = [
       en: "A focused checklist and tracking tool designed for operational efficiency. Simple, effective, and reliable.",
       fr: "Un outil de checklist et de suivi conçu pour l'efficacité opérationnelle. Simple, efficace et fiable."
     },
-    stack: ["React", "LocalStorage", "State Management"],
+    stack: ["React", "LocalStorage", "State Management", "UI/UX"],
     link: "https://serpenter.netlify.app/",
     type: "product",
     category: "product",
