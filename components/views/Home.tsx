@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useTransform, Variants } from 'framer-motion';
-import { ArrowDown, ArrowUpRight, Clapperboard, Palette, PenTool, Printer, Users, User, Share2, Layers, Zap, XCircle, CheckCircle } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Clapperboard, Palette, PenTool, Printer, Users, User, Share2, Layers, Zap, XCircle, CheckCircle, Monitor } from 'lucide-react';
 import { PERSONAL_INFO, PROJECTS, TEAM_MEMBERS } from '../../constants';
 import { Language } from '../../types';
 
@@ -118,7 +118,7 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
          </motion.div>
       </div>
 
-      {/* POLINIZZ HIGHLIGHT */}
+      {/* POLINIZZ HIGHLIGHT - LIVE PREVIEW VERSION */}
       {featuredProject && (
         <section className="py-32 px-6 md:px-12 relative text-ink dark:text-off-white">
            <motion.div 
@@ -145,26 +145,51 @@ const Home: React.FC<HomeProps> = ({ lang, navigateTo, setHoveredProject }) => {
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="w-full h-[60vh] md:h-[80vh] relative overflow-hidden group rounded-xl shadow-2xl border border-white/5"
+              className="w-full h-[60vh] md:h-[80vh] relative overflow-hidden group rounded-xl shadow-2xl border border-white/5 bg-white"
            >
-              <img 
-                 src={featuredProject.image} 
-                 alt="Polinizz App Interface" 
-                 loading="lazy"
-                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 transform group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+              {/* Browser Header Bar */}
+              <div className="absolute top-0 left-0 right-0 h-8 bg-gray-200 dark:bg-zinc-800 z-20 flex items-center px-4 gap-2 border-b border-black/5 dark:border-white/5">
+                 <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                 <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                 <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                 <div className="ml-4 bg-white dark:bg-black/20 px-3 py-1 rounded text-[10px] font-mono opacity-50 flex items-center gap-2">
+                    <Monitor size={10} /> polinizz.fr
+                 </div>
+              </div>
+
+              {/* Live Iframe */}
+              {featuredProject.link ? (
+                 <div className="w-full h-full pt-8 relative">
+                    {/* Overlay for non-clickable effect */}
+                    <a href={featuredProject.link} target="_blank" className="absolute inset-0 z-10 bg-transparent cursor-pointer" title="Open Website"></a>
+                    <iframe 
+                       src={featuredProject.link}
+                       loading="lazy"
+                       className="w-full h-full border-0 pointer-events-none select-none bg-white"
+                       title="Polinizz Live Preview"
+                    />
+                 </div>
+              ) : (
+                 <img 
+                    src={featuredProject.image} 
+                    alt="Polinizz App Interface" 
+                    loading="lazy"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 transform group-hover:scale-105"
+                 />
+              )}
               
-              <div className="absolute bottom-12 left-6 md:left-12 max-w-2xl">
-                 <p className="text-xl md:text-2xl text-white font-light leading-relaxed mb-8">
-                    {featuredProject.description[lang]}
-                 </p>
-                 <div className="flex flex-wrap gap-3">
-                    {featuredProject.stack.map(s => (
-                       <span key={s} className="px-4 py-2 border border-white/20 rounded-full text-xs uppercase tracking-widest text-white bg-black/40 backdrop-blur-md">
-                          {s}
-                       </span>
-                    ))}
+              <div className="absolute bottom-12 left-6 md:left-12 max-w-2xl pointer-events-none z-20">
+                 <div className="bg-black/60 dark:bg-black/60 backdrop-blur-md p-6 rounded-xl border border-white/10">
+                    <p className="text-xl md:text-2xl text-white font-light leading-relaxed mb-6">
+                       {featuredProject.description[lang]}
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                       {featuredProject.stack.map(s => (
+                          <span key={s} className="px-4 py-2 border border-white/20 rounded-full text-xs uppercase tracking-widest text-white bg-white/5">
+                             {s}
+                          </span>
+                       ))}
+                    </div>
                  </div>
               </div>
            </motion.div>
