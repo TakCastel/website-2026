@@ -16,6 +16,11 @@ const Estimate = lazy(() => import('./components/views/Estimate'));
 const Contact = lazy(() => import('./components/views/Contact'));
 const NotFound = lazy(() => import('./components/views/NotFound'));
 
+// Legal Pages
+const LegalNotice = lazy(() => import('./components/views/LegalNotice'));
+const PrivacyPolicy = lazy(() => import('./components/views/PrivacyPolicy'));
+const TermsOfSales = lazy(() => import('./components/views/TermsOfSales'));
+
 type Theme = 'light' | 'dark';
 
 // Internal component that uses Router hooks
@@ -82,6 +87,9 @@ const AppContent: React.FC = () => {
       '/services': lang === 'fr' ? 'Services & Expertises (React, Next.js) | Tarik Talhaoui' : 'Services & Tech Stack | Tarik Talhaoui',
       '/estimate': lang === 'fr' ? 'Calculateur de Devis Web | Tarik Talhaoui' : 'Web Project Estimator | Tarik Talhaoui',
       '/contact': lang === 'fr' ? 'Contactez un Expert Freelance | Tarik Talhaoui' : 'Contact a Freelance Expert | Tarik Talhaoui',
+      '/legal': lang === 'fr' ? 'Mentions Légales | Tarik Talhaoui' : 'Legal Notice | Tarik Talhaoui',
+      '/privacy': lang === 'fr' ? 'Politique de Confidentialité | Tarik Talhaoui' : 'Privacy Policy | Tarik Talhaoui',
+      '/terms': lang === 'fr' ? 'CGV | Tarik Talhaoui' : 'Terms of Sales | Tarik Talhaoui',
     };
     document.title = titles[location.pathname as keyof typeof titles] || 'Tarik Talhaoui';
   }, [location, lang]);
@@ -359,6 +367,11 @@ const AppContent: React.FC = () => {
                 <Route path="/services" element={<Services lang={lang} />} />
                 <Route path="/estimate" element={<Estimate lang={lang} />} />
                 <Route path="/contact" element={<Contact lang={lang} />} />
+                {/* Legal Routes */}
+                <Route path="/legal" element={<LegalNotice lang={lang} />} />
+                <Route path="/privacy" element={<PrivacyPolicy lang={lang} />} />
+                <Route path="/terms" element={<TermsOfSales lang={lang} />} />
+                
                 <Route path="*" element={<NotFound lang={lang} />} />
             </Routes>
           </Suspense>
@@ -366,10 +379,21 @@ const AppContent: React.FC = () => {
 
         {/* Footer */}
         <footer className="px-6 md:px-12 py-12 border-t border-black/10 dark:border-white/10 mt-20 bg-paper dark:bg-surface text-ink dark:text-off-white">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12">
               <div className="flex flex-col gap-4">
                   <span className="font-display font-bold text-2xl">Tarik.T</span>
                   <span className="text-xs opacity-50 uppercase tracking-widest">© 2025 {UI_TEXT[lang].rights}</span>
+                  <div className="flex flex-wrap gap-4 mt-2">
+                     <Link to="/legal" className="text-[10px] uppercase font-bold tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-colors">
+                        {lang === 'fr' ? 'Mentions Légales' : 'Legal Notice'}
+                     </Link>
+                     <Link to="/privacy" className="text-[10px] uppercase font-bold tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-colors">
+                        {lang === 'fr' ? 'Confidentialité' : 'Privacy'}
+                     </Link>
+                     <Link to="/terms" className="text-[10px] uppercase font-bold tracking-widest opacity-60 hover:opacity-100 hover:text-accent transition-colors">
+                        {lang === 'fr' ? 'CGV' : 'Terms'}
+                     </Link>
+                  </div>
               </div>
               
               <div className="flex flex-col items-end gap-4">

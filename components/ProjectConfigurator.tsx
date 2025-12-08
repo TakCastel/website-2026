@@ -6,10 +6,10 @@ import {
     Check, Download, Send, Calculator, FileText, 
     ArrowRight, ChevronLeft, Layout, ShoppingCart, 
     Layers, Zap, Palette, Globe, Smartphone, Server,
-    GraduationCap
+    GraduationCap, Info
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 interface ProjectConfiguratorProps {
   lang: Language;
@@ -95,7 +95,7 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
     doc.text("Tarik Talhaoui - Product Builder", 20, 20);
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
-    doc.text("Lead Tech & Développeur Freelance", 20, 26);
+    doc.text("EI - SIRET: 000 000 000 00000", 20, 26); // Legal requirement
     doc.text("contact@tariktalhaoui.fr", 20, 32);
     doc.text("Avignon, France", 20, 38);
     
@@ -106,14 +106,14 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
     // Title
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text(lang === 'fr' ? "ESTIMATION DE PROJET" : "PROJECT ESTIMATION", 20, 60);
+    doc.text(lang === 'fr' ? "ESTIMATION DE PROJET (NON CONTRACTUEL)" : "PROJECT ESTIMATION (NON-BINDING)", 20, 60);
     
     // Main Project Box
     doc.setFillColor(245, 245, 245);
     doc.roundedRect(20, 70, 170, 30, 3, 3, 'F');
     doc.setFontSize(12);
     doc.text(`${lang === 'fr' ? "Type de projet" : "Project Type"}: ${activeConfig.title[lang]}`, 30, 85);
-    doc.text(`${lang === 'fr' ? "Base" : "Base"}: ${activeConfig.basePrice}€`, 150, 85);
+    doc.text(`${lang === 'fr' ? "Base" : "Base"}: ${activeConfig.basePrice}€ HT`, 150, 85);
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
     doc.text(activeConfig.description[lang], 30, 92);
@@ -130,7 +130,7 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
       activeConfig.options.forEach(opt => {
         if (selectedOptions.includes(opt.id)) {
           doc.text(`- ${opt.label[lang]}`, 30, yPos);
-          doc.text(`${opt.price}€`, 150, yPos);
+          doc.text(`${opt.price}€ HT`, 150, yPos);
           yPos += 8;
         }
       });
@@ -147,16 +147,17 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
     doc.setFont("helvetica", "bold");
     doc.setTextColor(100, 50, 200);
     doc.text(lang === 'fr' ? "TOTAL ESTIMÉ" : "ESTIMATED TOTAL", 30, yPos + 17);
-    doc.text(`${total}€`, 150, yPos + 17);
+    doc.text(`${total}€ HT`, 150, yPos + 17);
     
     // Footer / Disclaimer
-    doc.setFontSize(9);
+    doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
     doc.setFont("helvetica", "normal");
     yPos += 40;
+    
     const disclaimer = lang === 'fr' 
-      ? "Ceci est une estimation non-contractuelle basée sur des tarifs moyens constatés à Avignon. Le prix final peut varier selon le cahier des charges détaillé." 
-      : "This is a non-binding estimate based on average rates in Avignon. Final price may vary based on detailed specifications.";
+      ? "Ce document est une estimation tarifaire indicative et ne constitue pas une offre ferme. Les prix sont hors taxes (TVA non applicable, art. 293 B du CGI). Le prix final sera fixé après étude détaillée du cahier des charges et fera l'objet d'un devis formel soumis aux Conditions Générales de Vente (CGV) disponibles sur le site." 
+      : "This document is an indicative price estimate and does not constitute a binding offer. Prices are excluding tax. Final price will be set after detailed study of specifications and will be subject to a formal quote under the General Terms of Sales (CGV) available on the website.";
     
     const splitDisclaimer = doc.splitTextToSize(disclaimer, 170);
     doc.text(splitDisclaimer, 20, yPos);
@@ -165,7 +166,7 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
   };
 
   const handleContact = () => {
-    const message = `Bonjour Tarik,\n\nJ'ai configuré un projet sur votre site :\n\nType : ${activeConfig?.title[lang]}\n\nOptions :\n${activeConfig?.options.filter(o => selectedOptions.includes(o.id)).map(o => `- ${o.label[lang]}`).join('\n')}\n\nBudget estimé : ${total}€.\n\nPouvons-nous en discuter ?`;
+    const message = `Bonjour Tarik,\n\nJ'ai configuré un projet sur votre site (Soumis aux CGV) :\n\nType : ${activeConfig?.title[lang]}\n\nOptions :\n${activeConfig?.options.filter(o => selectedOptions.includes(o.id)).map(o => `- ${o.label[lang]}`).join('\n')}\n\nBudget estimé : ${total}€ HT.\n\nPouvons-nous en discuter ?`;
     navigate('/contact', { state: { prefilledMessage: message } });
   };
 
@@ -280,7 +281,7 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
                          ))}
                     </div>
 
-                    {/* Options Grid - Improved Responsive Layout */}
+                    {/* Options Grid */}
                     <div className="grid md:grid-cols-2 gap-4 mb-8">
                         {activeConfig.options
                             .filter(opt => activeCategory === 'all' || opt.category === activeCategory)
@@ -340,12 +341,13 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
                     <h2 className="font-display text-4xl font-bold uppercase mb-4">
                         {lang === 'fr' ? "Configuration Terminée !" : "Configuration Complete!"}
                     </h2>
-                    <p className="opacity-60 max-w-md mx-auto mb-10 text-lg">
+                    <div className="bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 px-4 py-2 rounded-lg text-xs md:text-sm mb-6 max-w-lg flex items-start gap-2 text-left">
+                        <Info size={16} className="shrink-0 mt-0.5" />
                         {lang === 'fr' 
-                            ? "Votre estimation est prête. Téléchargez-la ou contactez-moi directement." 
-                            : "Your estimate is ready. Download it or contact me directly."}
-                    </p>
-                    
+                           ? "Estimation non contractuelle. Le prix final sera validé sur devis formel." 
+                           : "Non-binding estimate. Final price subject to formal quote."}
+                    </div>
+
                     <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
                         <button onClick={() => setStep(2)} className="text-xs font-bold uppercase tracking-widest opacity-60 hover:opacity-100 px-6 py-4">
                             {lang === 'fr' ? 'Modifier' : 'Edit'}
@@ -363,6 +365,9 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
                              <Send size={16} /> {lang === 'fr' ? 'Envoyer au Studio' : 'Send to Studio'}
                         </button>
                     </div>
+                    <p className="mt-6 text-[10px] opacity-40">
+                         {lang === 'fr' ? "En envoyant cette estimation, vous acceptez nos CGV." : "By sending this estimate, you agree to our Terms of Sales."}
+                    </p>
                 </motion.div>
             )}
 
@@ -411,7 +416,7 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
                               {total}€
                           </motion.span>
                           <span className="text-[10px] opacity-40 uppercase tracking-widest">
-                            {lang === 'fr' ? "Moyenne Avignon" : "Avignon Average"}
+                            {lang === 'fr' ? "Hors Taxes (HT)" : "Excl. Tax"}
                           </span>
                       </div>
                   </div>
@@ -436,6 +441,10 @@ const ProjectConfigurator: React.FC<ProjectConfiguratorProps> = ({ lang, current
 
               <div className="text-[10px] opacity-40 leading-relaxed text-center">
                  {lang === 'fr' ? "*Tarif indicatif hors hébergement." : "*Indicative price excl. hosting."}
+                 <br />
+                 <Link to="/terms" className="underline hover:text-accent">
+                    {lang === 'fr' ? "Voir Conditions" : "See Terms"}
+                 </Link>
               </div>
 
           </div>

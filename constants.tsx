@@ -41,6 +41,17 @@ export const PERSONAL_INFO = {
   }
 };
 
+// --- LEGAL INFO (A REMPLIR IMPERATIVEMENT) ---
+export const LEGAL_INFO = {
+  companyName: "Tarik Talhaoui (Entrepreneur Individuel)", 
+  siret: "853 165 736 00019",
+  address: "12 Rue du Portail Bienson, 84000 Avignon, France",
+  vatNumber: "TVA non applicable, art. 293 B du CGI",
+  hostName: "Google Cloud Platform (Google Ireland Limited)", 
+  hostAddress: "Gordon House, Barrow Street, Dublin 4, Irlande",
+  mediator: "CNPM Médiation Consommation" // Obligatoire pour les freelances B2C/Mixte
+};
+
 export const CV_FULL_CONTENT = `
 EXPERIENCE PROFESSIONNELLE:
 - 2025: Développeur Freelance (Actuel). Conception sites sur mesure (WordPress, Next.js, Decap CMS), intégration vidéo, DevOps (OVH, Netlify, Vercel), maquettes Figma.

@@ -17,7 +17,8 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
     email: '',
     message: ''
   });
-
+  
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   // Check for prefilled message from configurator
@@ -33,11 +34,12 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!consent) return;
     setStatus('sending');
 
     // Build mailto link
     const subject = `Projet Portfolio: ${formData.name}`;
-    const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`;
+    const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}\n\n(Consentement RGPD validé)`;
     const mailtoLink = `mailto:contact@tariktalhaoui.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
     // Simulate network delay for better UX, then open mailto and show success
@@ -191,10 +193,29 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
                                 required
                             ></textarea>
                         </div>
+                        
+                        {/* GDPR Consent Checkbox */}
+                        <div className="flex items-start gap-3 pt-2">
+                           <input 
+                              type="checkbox" 
+                              id="consent" 
+                              checked={consent}
+                              onChange={(e) => setConsent(e.target.checked)}
+                              className="mt-1 w-4 h-4 accent-accent bg-transparent border-black/20 dark:border-white/20"
+                              required 
+                           />
+                           <label htmlFor="consent" className="text-xs opacity-60 leading-relaxed cursor-pointer select-none">
+                              {lang === 'fr' 
+                                ? <>J'accepte que mes données soient traitées pour répondre à ma demande. Voir la <Link to="/privacy" className="underline hover:text-accent">Politique de confidentialité</Link>.</>
+                                : <>I agree to my data being processed to answer my request. See <Link to="/privacy" className="underline hover:text-accent">Privacy Policy</Link>.</>
+                              }
+                           </label>
+                        </div>
+
                         <button 
                             type="submit" 
-                            disabled={status === 'sending'}
-                            className="px-12 py-5 bg-ink text-white dark:bg-off-white dark:text-black font-display font-bold uppercase text-lg hover:bg-accent hover:text-white dark:hover:bg-accent dark:hover:text-white transition-colors w-full md:w-auto shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                            disabled={status === 'sending' || !consent}
+                            className="px-12 py-5 bg-ink text-white dark:bg-off-white dark:text-black font-display font-bold uppercase text-lg hover:bg-accent hover:text-white dark:hover:bg-accent dark:hover:text-white transition-colors w-full md:w-auto shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {status === 'sending' ? (
                                 <span className="flex items-center gap-2">
