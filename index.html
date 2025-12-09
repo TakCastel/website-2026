@@ -86,6 +86,17 @@
     </noscript>
 </head>
   <body class="bg-paper dark:bg-void text-ink dark:text-off-white">
+    <!-- Formulaire fantôme pour que Netlify détecte le formulaire React -->
+    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <p aria-hidden="true">
+        <label>Ne pas remplir : <input name="bot-field" /></label>
+      </p>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+      <div data-netlify-recaptcha="true"></div>
+    </form>
     <div id="root"></div>
     <!-- Entrée Vite -->
     <script type="module" src="/index.tsx"></script>

@@ -53,11 +53,14 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
     };
 
     try {
-      await fetch('/', {
+      const response = await fetch('/?no-cache=1', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encode(payload),
       });
+      if (!response.ok) {
+        throw new Error(`Netlify form response ${response.status}`);
+      }
       setStatus('success');
     } catch (error) {
       console.error('Netlify form error', error);
