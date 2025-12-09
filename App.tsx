@@ -4,8 +4,6 @@ import { HashRouter, Routes, Route, Link, useLocation, useNavigate } from 'react
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon, Accessibility } from 'lucide-react';
 import { PROJECTS } from './constants';
-import ChatWidget from './components/ChatWidget';
-import LoadingScreen from './components/LoadingScreen';
 import { Language } from './types';
 
 // Lazy Loading Views for Performance
@@ -20,6 +18,7 @@ const NotFound = lazy(() => import('./components/views/NotFound'));
 const LegalNotice = lazy(() => import('./components/views/LegalNotice'));
 const PrivacyPolicy = lazy(() => import('./components/views/PrivacyPolicy'));
 const TermsOfSales = lazy(() => import('./components/views/TermsOfSales'));
+const ChatWidget = lazy(() => import('./components/ChatWidget'));
 
 type Theme = 'light' | 'dark';
 
@@ -37,9 +36,7 @@ const AppContent: React.FC = () => {
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [scrolled, setScrolled] = useState(false);
-  
-  // Loading State
-  const [isLoading, setIsLoading] = useState(true);
+  const [chatReady, setChatReady] = useState(false);
   
   const [theme, setTheme] = useState<Theme>(() => 
     (typeof window !== 'undefined' ? localStorage.getItem('theme') as Theme : 'dark') || 'dark'
@@ -128,8 +125,24 @@ const AppContent: React.FC = () => {
   // Close menu on route change
   useEffect(() => {
     setMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
   }, [location]);
+
+  // Charge le widget chat en tâche de fond pour éviter de bloquer le rendu initial
+  useEffect(() => {
+    const idleCb = (window as any).requestIdleCallback;
+    const timeout = idleCb
+      ? idleCb(() => setChatReady(true))
+      : setTimeout(() => setChatReady(true), 1800);
+
+    return () => {
+      if (idleCb && typeof idleCb === 'function') {
+        (window as any).cancelIdleCallback?.(timeout);
+      } else {
+        clearTimeout(timeout as number);
+      }
+    };
+  }, []);
 
   const toggleTheme = async (e: React.MouseEvent) => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -199,11 +212,6 @@ const AppContent: React.FC = () => {
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 relative cursor-default bg-paper dark:bg-void text-ink dark:text-off-white selection:bg-accent selection:text-white overflow-x-hidden`}>
       
-      {/* Loading Screen Overlay */}
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />}
-      </AnimatePresence>
-      
       {/* Noise Texture Overlay */}
       <div className="fixed inset-0 bg-noise opacity-[0.03] dark:opacity-[0.15] pointer-events-none z-50 mix-blend-overlay"></div>
 
@@ -233,12 +241,12 @@ const AppContent: React.FC = () => {
       </motion.div>
 
       {/* Main Content */}
-      <div className={isLoading ? "h-screen overflow-hidden" : ""}>
+      <div>
         {/* Navigation Header */}
         <motion.header 
           initial={{ y: -100 }}
           animate={{ y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: isLoading ? 0 : 0.5 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
             scrolled 
               ? 'bg-white/80 dark:bg-void/80 backdrop-blur-xl py-4 border-black/5 dark:border-white/5 shadow-sm' 
@@ -411,7 +419,11 @@ const AppContent: React.FC = () => {
           </div>
         </footer>
 
-        <ChatWidget />
+        {chatReady && (
+          <Suspense fallback={null}>
+            <ChatWidget />
+          </Suspense>
+        )}
       </div>
     </div>
   );

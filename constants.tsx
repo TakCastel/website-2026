@@ -41,8 +41,8 @@ export const PERSONAL_INFO = {
     fr: "Précision Technique. Impact Créatif."
   },
   bio: {
-    en: "I don't just write code; I build digital products. As a Product Builder, I bridge the gap between complex engineering and elegant design to help your business grow.",
-    fr: "Je ne fais pas que du code, je construis des produits digitaux. En tant que Product Builder, je fais le pont entre l'ingénierie technique et un design élégant pour faire grandir votre activité."
+    en: "I build complete digital products, not just code. As a Product Builder, I link deep engineering with premium design to boost your growth and visibility.",
+    fr: "Je conçois des produits digitaux complets, pas seulement du code. En Product Builder, je relie l’ingénierie technique à un design haut de gamme pour accélérer la croissance et la visibilité de votre activité."
   },
   socials: {
     linkedin: "https://www.linkedin.com/in/tarik-talhaoui-832769110/fr?originalSubdomain=fr",

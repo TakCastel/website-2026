@@ -15,7 +15,8 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    botField: ''
   });
   
   const [consent, setConsent] = useState(false);
@@ -32,21 +33,37 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const encode = (data: Record<string, string>) =>
+    Object.keys(data)
+      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!consent) return;
     setStatus('sending');
+    const recaptcha = (document.querySelector('[name=\"g-recaptcha-response\"]') as HTMLInputElement)?.value || '';
+    const payload = {
+      'form-name': 'contact',
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      'bot-field': formData.botField,
+      'g-recaptcha-response': recaptcha,
+    };
 
-    // Build mailto link
-    const subject = `Projet Portfolio: ${formData.name}`;
-    const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}\n\n(Consentement RGPD validé)`;
-    const mailtoLink = `mailto:contact@tariktalhaoui.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    // Simulate network delay for better UX, then open mailto and show success
-    setTimeout(() => {
-        window.location.href = mailtoLink;
-        setStatus('success');
-    }, 1500);
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode(payload),
+      });
+      setStatus('success');
+    } catch (error) {
+      console.error('Netlify form error', error);
+      setStatus('idle');
+      alert(lang === 'fr' ? "Erreur d'envoi. Réessaie dans un instant." : 'Send failed. Please try again.');
+    }
   };
 
   const openCalendly = () => {
@@ -153,7 +170,16 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
                         exit={{ opacity: 0, x: -30 }}
                         className="space-y-8 w-full" 
                         onSubmit={handleSubmit}
+                        name="contact"
+                        method="POST"
+                        data-netlify="true"
+                        data-netlify-honeypot="bot-field"
+                        data-netlify-recaptcha="true"
                     >
+                        <input type="hidden" name="form-name" value="contact" />
+                        <p hidden>
+                          <label>Don’t fill this out: <input name="bot-field" onChange={handleInputChange} value={formData.botField} /></label>
+                        </p>
                         <div className="space-y-2">
                             <label htmlFor="name" className="text-xs font-bold uppercase tracking-widest opacity-50">Name</label>
                             <input 
@@ -194,6 +220,9 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
                             ></textarea>
                         </div>
                         
+                        {/* reCAPTCHA (Netlify injecte le script quand activé côté dashboard) */}
+                        <div data-netlify-recaptcha="true"></div>
+
                         {/* GDPR Consent Checkbox */}
                         <div className="flex items-start gap-3 pt-2">
                            <input 
