@@ -42,14 +42,12 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
     e.preventDefault();
     if (!consent) return;
     setStatus('sending');
-    const recaptcha = (document.querySelector('[name=\"g-recaptcha-response\"]') as HTMLInputElement)?.value || '';
     const payload = {
       'form-name': 'contact',
       name: formData.name,
       email: formData.email,
       message: formData.message,
       'bot-field': formData.botField,
-      'g-recaptcha-response': recaptcha,
     };
 
     try {
@@ -177,7 +175,6 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
                         method="POST"
                         data-netlify="true"
                         data-netlify-honeypot="bot-field"
-                        data-netlify-recaptcha="true"
                     >
                         <input type="hidden" name="form-name" value="contact" />
                         <p hidden>
