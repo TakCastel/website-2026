@@ -17,6 +17,7 @@ export interface Project {
   link?: string;
   featured?: boolean;
   image?: string;
+  alt?: MultiLangString;
   type: 'freelance' | 'agency' | 'product' | 'student';
   category: ProjectCategory;
   confidential?: boolean;

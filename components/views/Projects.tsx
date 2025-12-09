@@ -56,7 +56,7 @@ const Projects: React.FC<ProjectsProps> = ({ lang }) => {
                   <div className="w-full h-full pt-6 relative bg-white dark:bg-zinc-900">
                       <img 
                           src={project.image} 
-                          alt={project.title[lang]} 
+                          alt={project.alt?.[lang] ?? project.title[lang]} 
                           loading="lazy"
                           className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                           width={800}

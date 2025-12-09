@@ -18,6 +18,15 @@ import {
   Palette,
   GraduationCap
 } from 'lucide-react';
+import polinizzImage from './assets/polinizz.png';
+import serpenterImage from './assets/serpenter.png';
+import arnaudbanImage from './assets/arnaudban.png';
+import florineclapImage from './assets/florineclap.png';
+import bricetheateImage from './assets/bricetheate.png';
+import soleilImage from './assets/123soleil.png';
+import prehistopiaImage from './assets/prehistopia.png';
+import archeodeImage from './assets/archeode.png';
+import pixelwarImage from './assets/pixelwar.png';
 
 export const PERSONAL_INFO = {
   name: "Tarik Talhaoui",
@@ -296,7 +305,11 @@ export const PROJECTS: Project[] = [
     featured: true,
     type: "product",
     category: "product",
-    image: "https://picsum.photos/seed/polinizz/1200/800", 
+    image: polinizzImage,
+    alt: {
+      en: "Screenshot of the Polinizz cultural events platform",
+      fr: "Capture d'écran du moteur culturel Polinizz"
+    },
     confidential: false
   },
   {
@@ -312,7 +325,11 @@ export const PROJECTS: Project[] = [
     link: "https://serpenter.netlify.app/",
     type: "product",
     category: "product",
-    image: "https://picsum.photos/seed/serpenter/1200/800", 
+    image: serpenterImage,
+    alt: {
+      en: "Serpenter checklist interface focused on operations",
+      fr: "Interface de checklist Serpenter orientée efficacité"
+    },
     confidential: false,
     featured: true
   },
@@ -329,7 +346,11 @@ export const PROJECTS: Project[] = [
     link: "https://arnaudban.fr",
     type: "freelance",
     category: "client",
-    image: "https://picsum.photos/seed/arnaudban/1200/800", 
+    image: arnaudbanImage,
+    alt: {
+      en: "Director Arnaud Ban portfolio website",
+      fr: "Portfolio du réalisateur Arnaud Ban"
+    },
     confidential: false
   },
   {
@@ -345,7 +366,11 @@ export const PROJECTS: Project[] = [
     link: "https://florineclap.netlify.app",
     type: "freelance",
     category: "client",
-    image: "https://picsum.photos/seed/florine/1200/800", 
+    image: florineclapImage,
+    alt: {
+      en: "Florine Clap director portfolio with videos and reels",
+      fr: "Portfolio vidéo de la réalisatrice Florine Clap"
+    },
     confidential: false
   },
   {
@@ -361,7 +386,11 @@ export const PROJECTS: Project[] = [
     link: "https://bricetheate.fr",
     type: "freelance",
     category: "client",
-    image: "https://picsum.photos/seed/brice/1200/800", 
+    image: bricetheateImage,
+    alt: {
+      en: "Brice Théate screenwriter portfolio site",
+      fr: "Portfolio du scénariste Brice Théate"
+    },
     confidential: false
   },
   {
@@ -377,7 +406,11 @@ export const PROJECTS: Project[] = [
     link: "https://123soleil.netlify.app",
     type: "freelance",
     category: "client",
-    image: "https://picsum.photos/seed/soleil/1200/800", 
+    image: soleilImage,
+    alt: {
+      en: "123 Soleil association management platform",
+      fr: "Plateforme associative 123 Soleil"
+    },
     confidential: false
   },
   {
@@ -393,7 +426,11 @@ export const PROJECTS: Project[] = [
     link: "https://prehistopia.vercel.app/",
     type: "product",
     category: "lab",
-    image: "https://picsum.photos/seed/prehisto/1200/800",
+    image: prehistopiaImage,
+    alt: {
+      en: "Prehistopia browser-based city builder game",
+      fr: "Jeu city builder Prehistopia dans le navigateur"
+    },
     confidential: false
   },
   {
@@ -409,7 +446,11 @@ export const PROJECTS: Project[] = [
     link: "https://archeode.fr",
     type: "freelance",
     category: "client",
-    image: "https://picsum.photos/seed/archeode/1200/800",
+    image: archeodeImage,
+    alt: {
+      en: "Archéode guild community hub website",
+      fr: "Site communautaire de la Guilde Archéode"
+    },
     confidential: false
   },
   {
@@ -425,7 +466,11 @@ export const PROJECTS: Project[] = [
     link: "https://threadcity.fr/",
     type: "student",
     category: "lab",
-    image: "https://picsum.photos/seed/thread/1200/800",
+    image: pixelwarImage,
+    alt: {
+      en: "ThreadCity collaborative pixel war canvas",
+      fr: "Toile collaborative ThreadCity façon Pixel War"
+    },
     confidential: false
   }
 ];
