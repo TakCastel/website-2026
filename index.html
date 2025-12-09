@@ -86,8 +86,8 @@
     </noscript>
 </head>
   <body class="bg-paper dark:bg-void text-ink dark:text-off-white">
-    <!-- Formulaire fantôme pour que Netlify détecte le formulaire React -->
-    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+    <!-- Formulaire fantôme (statique) pour que Netlify détecte le formulaire React -->
+    <form name="contact" method="POST" action="/" netlify data-netlify="true" data-netlify-honeypot="bot-field" hidden aria-hidden="true">
       <input type="hidden" name="form-name" value="contact" />
       <p aria-hidden="true">
         <label>Ne pas remplir : <input name="bot-field" /></label>
